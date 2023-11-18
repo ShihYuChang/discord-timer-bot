@@ -6,7 +6,7 @@ export const data = new SlashCommandBuilder()
   .setDescription("End the timer for work.");
 
 const saveEndTime = async (time) => {
-  await fetch("http://localhost:3000/data", {
+  await fetch("http://localhost:8080/data", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,7 +18,7 @@ const saveEndTime = async (time) => {
 export async function execute(interaction) {
   const now = dayjs().format("YYYY-MM-DD HH:mm:ss");
   try {
-    const response = await fetch("http://localhost:3000/data");
+    const response = await fetch("http://localhost:8080/data");
     const jsonData = await response.json();
     const startData = jsonData.filter((item) => item.start);
     if (startData.length === 0) {

@@ -8,7 +8,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction) {
   const now = dayjs().format("YYYY-MM-DD HH:mm:ss");
   try {
-    await fetch("http://localhost:3000/data", {
+    await fetch("http://localhost:8080/data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

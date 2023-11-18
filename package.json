@@ -7,9 +7,10 @@
     "json-server": "^0.17.4"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "concurrently --kill-others \"node index.js\" \"json-server --watch db.json --port 8080\""
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "eslint": "^8.53.0"
   }
 }
