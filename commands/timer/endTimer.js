@@ -16,7 +16,7 @@ const saveEndTime = async (time) => {
 };
 
 export async function execute(interaction) {
-  const now = dayjs().format("YYYY-MM-DD HH:mm:ss");
+  const now = dayjs().locale("zh-TW").format("YYYY-MM-DD HH:mm:ss");
   try {
     const response = await fetch("http://localhost:8080/data");
     const jsonData = await response.json();
@@ -38,7 +38,8 @@ export async function execute(interaction) {
     )} 小時 ${String(minutes).padStart(2, "0")} 分 ${String(seconds).padStart(
       2,
       "0"
-    )} 秒`;
+    )} 秒
+結束時間：${now}`;
     await saveEndTime(now);
     await interaction.channel.send(formattedDuration);
   } catch (err) {
