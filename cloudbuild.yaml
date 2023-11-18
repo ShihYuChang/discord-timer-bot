@@ -1,0 +1,41 @@
+steps:
+  - id: Build image
+    name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "${_IMAGE_NAME}", "."]
+
+  # - id: Build with kaniko
+  #   name: 'gcr.io/kaniko-project/executor:latest'
+  #   args:
+  #   - --destination=${_IMAGE_NAME}
+  #   - --cache=true
+  #   - --cache-ttl=6h
+
+  - id: Push to AR
+    name: "gcr.io/cloud-builders/docker"
+    args: ["push", "${_IMAGE_NAME}"]
+
+  - id: Deploy to CR
+    name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "${_CLOUDRUN_NAME}",
+        "--image",
+        "${_IMAGE_NAME}",
+        "--region",
+        "${_LOCATION}",
+        "--project=discord-timer",
+      ]
+
+substitutions:
+  _LOCATION: "us-central1"
+  _IMAGE_NAME: "us-central1-docker.pkg.dev/discord-timer/discord-timer"
+  _REPOSITORY: "work-timer"
+
+images:
+  - "us-central1-docker.pkg.dev/discord-timer/discord-timer"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
