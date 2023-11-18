@@ -3,13 +3,6 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args: ["build", "-t", "${_IMAGE_NAME}", "."]
 
-  # - id: Build with kaniko
-  #   name: 'gcr.io/kaniko-project/executor:latest'
-  #   args:
-  #   - --destination=${_IMAGE_NAME}
-  #   - --cache=true
-  #   - --cache-ttl=6h
-
   - id: Push to AR
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "${_IMAGE_NAME}"]
@@ -31,11 +24,11 @@ steps:
 
 substitutions:
   _LOCATION: "us-central1"
-  _IMAGE_NAME: "us-central1-docker.pkg.dev/discord-timer/discord-timer"
+  _IMAGE_NAME: "us-central1-docker.pkg.dev/discord-timer/discord-timer/env:${TRIGGER_NAME}"
   _REPOSITORY: "discord-timer"
 
 images:
-  - "us-central1-docker.pkg.dev/discord-timer/discord-timer"
+  - "us-central1-docker.pkg.dev/discord-timer/discord-timer/env:${TRIGGER_NAME}"
 
 options:
   logging: CLOUD_LOGGING_ONLY
