@@ -32,7 +32,7 @@ steps:
 substitutions:
   _LOCATION: "us-central1"
   _IMAGE_NAME: "us-central1-docker.pkg.dev/discord-timer/discord-timer"
-  _REPOSITORY: "work-timer"
+  _REPOSITORY: "discord-timer"
 
 images:
   - "us-central1-docker.pkg.dev/discord-timer/discord-timer"
