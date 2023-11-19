@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { SlashCommandBuilder } from "discord.js";
+import { getTimeLabel } from "../../utils/time.js";
 
 export const data = new SlashCommandBuilder()
   .setName("off_work")
@@ -15,32 +16,37 @@ const saveEndTime = async (time) => {
   });
 };
 
+const saveDuration = async (date, duration) => {
+  await fetch("http://localhost:8080/data", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ date, duration }),
+  });
+};
+
 export async function execute(interaction) {
   const now = dayjs().locale("zh-TW").format("YYYY-MM-DD HH:mm:ss");
+  const now_date = dayjs().locale("zh-TW").format("YYYY-MM-DD");
   try {
     const response = await fetch("http://localhost:8080/data");
     const jsonData = await response.json();
     const startData = jsonData.filter((item) => item.start);
-    if (startData.length === 0) {
-      await interaction.reply("無開始時間資料，請先使用 /start-work 開始計時");
+    const startDataToday = startData.filter((item) =>
+      item.start.startsWith(now_date)
+    );
+    if (startDataToday.length === 0) {
+      await interaction.reply(
+        "無今日開始時間資料，請先使用 /start-work 開始計時"
+      );
       return;
     }
     const lastStart = startData[startData.length - 1].start;
     const workDuration = dayjs(now).diff(dayjs(lastStart), "second");
-
-    const hours = Math.floor(workDuration / 3600);
-    const minutes = Math.floor((workDuration % 3600) / 60);
-    const seconds = workDuration % 60;
-
-    const formattedDuration = `working_hours: ${String(hours).padStart(
-      2,
-      "0"
-    )} 小時 ${String(minutes).padStart(2, "0")} 分 ${String(seconds).padStart(
-      2,
-      "0"
-    )} 秒
-結束時間：${now}`;
+    const formattedDuration = getTimeLabel(workDuration);
     await saveEndTime(now);
+    await saveDuration(now_date, workDuration);
     await interaction.reply(formattedDuration);
   } catch (err) {
     interaction.reply("發生錯誤，請稍後再試");
