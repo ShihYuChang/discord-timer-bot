@@ -20,7 +20,7 @@ export async function execute(interaction) {
       body: JSON.stringify({ start: now }),
     });
     const user = interaction.member.nickname || interaction.user.globalName;
-    await interaction.channel.send(`${user} onboard!
+    interaction.reply(`${user} onboard!
 開始時間：${now}`);
   } catch (err) {
     interaction.reply("發生錯誤，請稍後再試");

@@ -41,7 +41,7 @@ export async function execute(interaction) {
     )} 秒
 結束時間：${now}`;
     await saveEndTime(now);
-    await interaction.channel.send(formattedDuration);
+    await interaction.reply(formattedDuration);
   } catch (err) {
     interaction.reply("發生錯誤，請稍後再試");
     console.log(err);
