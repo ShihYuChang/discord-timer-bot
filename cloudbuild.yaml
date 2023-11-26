@@ -24,7 +24,7 @@ steps:
 
 substitutions:
   _LOCATION: "us-central1"
-  _IMAGE_NAME: "us-central1-docker.pkg.dev/discord-timer/discord-timer/env:${TRIGGER_NAME}"
+  _IMAGE_NAME: "us-central1-docker.pkg.dev/discord-emoji-counter-406308/discord-timer/env:${TRIGGER_NAME}"
   _REPOSITORY: "discord-timer"
 
 images:
